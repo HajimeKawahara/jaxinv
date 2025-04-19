@@ -28,9 +28,9 @@ def meanmap_type2(
     Ni, _ = jnp.shape(geometric_weight)
     _, Nl = jnp.shape(spectral_matrix)
     Ky = generalized_weighted_kernel_type2(
-        geometric_weight, spectral_matrix, kernel_model_s, kernel_model_x, alpha
+        geometric_weight, spectral_matrix, kernel_model_s, kernel_model_x
     )
-    IKw = jnp.eye(Ni) + precision_matrix_data @ Ky
+    IKw = jnp.eye(Ni) + alpha * precision_matrix_data @ Ky
     nvector = solve(IKw, precision_matrix_data @ data)
     nmatrix = nvector.reshape((Ni, Nl))
 
@@ -48,9 +48,11 @@ def meanmap_type3(
 ):
     Ni, _ = jnp.shape(geometric_weight)
     Kw = generalized_weighted_kernel_type3(
-        geometric_weight, kernel_model_s, kernel_model_t, alpha
+        geometric_weight, kernel_model_s, kernel_model_t
     )
-    IKw = jnp.eye(Ni) + precision_matrix_data @ Kw
+    IKw = jnp.eye(Ni) + alpha * precision_matrix_data @ Kw
     nvector = solve(IKw, precision_matrix_data @ data)
-
-    return alpha * kernel_model_t @ (geometric_weight.T * nvector).T @ kernel_model_s
+    
+    #original algorithm from sot rundynamic_cpu
+    return alpha * kernel_model_t @ (geometric_weight.T * nvector).T @ kernel_model_s 
+    #return alpha * (kernel_model_t @ geometric_weight @ kernel_model_s ).T @ nvector
