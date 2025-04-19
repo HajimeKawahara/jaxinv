@@ -1,5 +1,3 @@
-from pytools import F
-from sympy import jn
 from jaxinv.bayes.weighted_kernel import generalized_weighted_kernel_type1
 from jaxinv.bayes.weighted_kernel import generalized_weighted_kernel_type2
 from jaxinv.bayes.weighted_kernel import generalized_weighted_kernel_type3
