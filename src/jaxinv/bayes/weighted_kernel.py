@@ -13,6 +13,8 @@ def generalized_weighted_kernel_type1(geometric_weight, kernel_model):
     """
     return geometric_weight @ kernel_model @ geometric_weight.T
 
+def _xkx(spectral_matrix, kernel_model_x):
+    return spectral_matrix.T @ kernel_model_x @ spectral_matrix
 
 def generalized_weighted_kernel_type2(
     geometric_weight, spectral_matrix, kernel_model_s, kernel_model_x, alpha
@@ -29,9 +31,9 @@ def generalized_weighted_kernel_type2(
     Returns:
         2D array: generalized weighted kernel of type 2 (Ni*Nl, Ni*Nl)
     """
-    WKW = geometric_weight @ kernel_model_s @ geometric_weight.T
-    XKX = spectral_matrix.T @ kernel_model_x @ spectral_matrix
-    return alpha * jnp.kron(WKW, XKX)
+    wkw = generalized_weighted_kernel_type1(geometric_weight, kernel_model_s)
+    xkx = _xkx(spectral_matrix, kernel_model_x)
+    return alpha * jnp.kron(wkw, xkx)
 
 
 def generalized_weighted_kernel_type3(
@@ -48,11 +50,8 @@ def generalized_weighted_kernel_type3(
     Returns:
         2D array: generalized weighted kernel of type 2 (Ni, Ni)
     """
-    return (
-        alpha
-        * kernel_model_t
-        * (geometric_weight @ kernel_model_s @ geometric_weight.T)
-    )
+    wkw = generalized_weighted_kernel_type1(geometric_weight, kernel_model_s)
+    return alpha * wkw * kernel_model_t
 
 
 def generalized_weighted_kernel_type4(
@@ -76,6 +75,8 @@ def generalized_weighted_kernel_type4(
     Returns:
         2D array: generalized weighted kernel of type 4 (Ni, Ni)
     """
-    XKX = spectral_matrix.T @ kernel_model_x @ spectral_matrix
-    WKW = geometric_weight @ kernel_model_s @ geometric_weight.T
-    return alpha * jnp.kron(WKW * kernel_model_t, XKX)
+    xkx = _xkx(spectral_matrix, kernel_model_x)
+    kernel_type3 = generalized_weighted_kernel_type3(
+        geometric_weight, kernel_model_s, kernel_model_t, alpha
+    )
+    return jnp.kron(kernel_type3 * kernel_model_t, xkx)
