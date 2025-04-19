@@ -79,4 +79,4 @@ def generalized_weighted_kernel_type4(
     kernel_type3 = generalized_weighted_kernel_type3(
         geometric_weight, kernel_model_s, kernel_model_t, alpha
     )
-    return jnp.kron(kernel_type3 * kernel_model_t, xkx)
+    return jnp.kron(kernel_type3, xkx)
