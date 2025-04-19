@@ -73,7 +73,7 @@ def generalized_weighted_kernel_type4(
         kernel_model_x (2D array): kernel for the model covariances for K( components) (Nk, Nk)
 
     Returns:
-        2D array: generalized weighted kernel of type 4 (Ni, Ni)
+        2D array: generalized weighted kernel of type 4 (Ni*Nl, Ni*Nl)
     """
     wkernel_spectral = weighted_spectral_kernel(spectral_matrix, kernel_model_x)
     kernel_type3 = generalized_weighted_kernel_type3(
