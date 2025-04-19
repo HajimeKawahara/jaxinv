@@ -23,9 +23,8 @@ def test_generalized_weighted_kernel_type2():
     geometric_weight, spectral_matrix, kernel_model_s, _, kernel_model_x = (
         _test_kernel_model(seed=0)
     )
-    alpha = 1.0
     result = generalized_weighted_kernel_type2(
-        geometric_weight, spectral_matrix, kernel_model_s, kernel_model_x, alpha
+        geometric_weight, spectral_matrix, kernel_model_s, kernel_model_x
     )
 
     assert result.shape == (10, 10), f"Expected shape (10, 10), got {result.shape}"
@@ -37,9 +36,8 @@ def test_generalized_weighted_kernel_type2():
 def test_generalized_weighted_kernel_type3():
     """Test the generalized weighted kernel of type 3"""
     geometric_weight, _, kernel_model_s, kernel_model_t, _ = _test_kernel_model(seed=0)
-    alpha = 1.0
     result = generalized_weighted_kernel_type3(
-        geometric_weight, kernel_model_s, kernel_model_t, alpha
+        geometric_weight, kernel_model_s, kernel_model_t
     )
     
     
