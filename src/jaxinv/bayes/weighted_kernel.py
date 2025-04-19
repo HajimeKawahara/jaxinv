@@ -66,7 +66,7 @@ def generalized_weighted_kernel_type4(
     """computes the generalized weighted kernel of type 4
 
     Args:
-        geometic_weight (2D array): geometric weight, W (Ni, Nj)
+        geometric_weight (2D array): geometric weight, W (Ni, Nj)
         spectral_matrix (2D array): component -- spectral matrix, X (Nk, Nl)
         kernel_model_s (2D array): kernel for the model covariances for S(patial) (Nj, Nj)
         kernel_model_t (2D array): kernel for the model covariances for T(emporal) (Ni, Ni)
