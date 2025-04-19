@@ -14,42 +14,69 @@ def generalized_weighted_kernel_type1(geometric_weight, kernel_model):
     return geometric_weight @ kernel_model @ geometric_weight.T
 
 
+def weighted_spectral_kernel(spectral_matrix, kernel_model_x):
+    """computes the weighted spectral kernel
+    Args:
+        spectral_matrix (2D array): component -- spectral matrix, X (Nk, Nl)
+        kernel_model_x (2D array): kernel for the model covariances for K( components) (Nk, Nk)
+    Returns:
+        2D array: weighted spectral kernel (Nl, Nl)
+    """
+
+    return spectral_matrix.T @ kernel_model_x @ spectral_matrix
+
+
 def generalized_weighted_kernel_type2(
-    geometric_weight, spectral_matrix, kernel_model_s, kernel_model_x, alpha
+    geometric_weight, spectral_matrix, kernel_model_s, kernel_model_x
 ):
     """computes the generalized weighted kernel of type 2
 
     Args:
         geometic_weight (2D array): geometric weight, W (Ni, Nj)
-        spectral_matrix (2D array): component -- spectrum matrix, X (Nk, Nl)
+        spectral_matrix (2D array): component -- spectral matrix, X (Nk, Nl)
         kernel_model_s (2D array): kernel for the model covariances for S(patial) (Nj, Nj)
         kernel_model_x (2D array): kernel for the model covariances for K( components) (Nk, Nk)
-        alpha (float): intensity of the kernel
 
     Returns:
         2D array: generalized weighted kernel of type 2 (Ni*Nl, Ni*Nl)
     """
-    WKW = geometric_weight @ kernel_model_s @ geometric_weight.T
-    XKX = spectral_matrix.T @ kernel_model_x @ spectral_matrix
-    return alpha * jnp.kron(WKW, XKX)
+    wkernel_type1 = generalized_weighted_kernel_type1(geometric_weight, kernel_model_s)
+    wkernel_spectral = weighted_spectral_kernel(spectral_matrix, kernel_model_x)
+    return jnp.kron(wkernel_type1, wkernel_spectral)
 
 
-def generalized_weighted_kernel_type3(
-    geometric_weight, kernel_model_s, kernel_model_t, alpha
-):
+def generalized_weighted_kernel_type3(geometric_weight, kernel_model_s, kernel_model_t):
     """computes the generalized weighted kernel of type 3
 
     Args:
         geometic_weight (2D array): geometric weight (Ni, Nj)
         kernel_model_s (2D array): kernel for the model covariances for S(patial) (Nj, Nj)
         kernel_model_t (2D array): kernel for the model covariances for T(emporal) (Ni, Ni)
-        alpha (float): intensity of the kernel
 
     Returns:
         2D array: generalized weighted kernel of type 2 (Ni, Ni)
     """
-    return (
-        alpha
-        * kernel_model_t
-        * (geometric_weight @ kernel_model_s @ geometric_weight.T)
+    wkernel_type1 = generalized_weighted_kernel_type1(geometric_weight, kernel_model_s)
+    return wkernel_type1 * kernel_model_t
+
+
+def generalized_weighted_kernel_type4(
+    geometric_weight, spectral_matrix, kernel_model_s, kernel_model_t, kernel_model_x
+):
+    """computes the generalized weighted kernel of type 4
+
+    Args:
+        geometric_weight (2D array): geometric weight, W (Ni, Nj)
+        spectral_matrix (2D array): component -- spectral matrix, X (Nk, Nl)
+        kernel_model_s (2D array): kernel for the model covariances for S(patial) (Nj, Nj)
+        kernel_model_t (2D array): kernel for the model covariances for T(emporal) (Ni, Ni)
+        kernel_model_x (2D array): kernel for the model covariances for K( components) (Nk, Nk)
+
+    Returns:
+        2D array: generalized weighted kernel of type 4 (Ni*Nl, Ni*Nl)
+    """
+    wkernel_spectral = weighted_spectral_kernel(spectral_matrix, kernel_model_x)
+    kernel_type3 = generalized_weighted_kernel_type3(
+        geometric_weight, kernel_model_s, kernel_model_t
     )
+    return jnp.kron(kernel_type3, wkernel_spectral)

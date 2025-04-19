@@ -1,6 +1,8 @@
 from jaxinv.bayes.weighted_kernel import generalized_weighted_kernel_type1
 from jaxinv.bayes.weighted_kernel import generalized_weighted_kernel_type2
 from jaxinv.bayes.weighted_kernel import generalized_weighted_kernel_type3
+from jaxinv.bayes.weighted_kernel import generalized_weighted_kernel_type4
+
 import pytest
 import jax.numpy as jnp
 from jax import random
@@ -23,28 +25,51 @@ def test_generalized_weighted_kernel_type2():
     geometric_weight, spectral_matrix, kernel_model_s, _, kernel_model_x = (
         _test_kernel_model(seed=0)
     )
-    alpha = 1.0
     result = generalized_weighted_kernel_type2(
-        geometric_weight, spectral_matrix, kernel_model_s, kernel_model_x, alpha
+        geometric_weight, spectral_matrix, kernel_model_s, kernel_model_x
     )
 
     assert result.shape == (10, 10), f"Expected shape (10, 10), got {result.shape}"
-    assert (
-        jnp.sum(result) == pytest.approx(106.90668)
+    assert jnp.sum(result) == pytest.approx(
+        106.90668
     ), f"Expected sum 106.90668, got {jnp.sum(result)}"
 
 
 def test_generalized_weighted_kernel_type3():
     """Test the generalized weighted kernel of type 3"""
     geometric_weight, _, kernel_model_s, kernel_model_t, _ = _test_kernel_model(seed=0)
-    alpha = 1.0
     result = generalized_weighted_kernel_type3(
-        geometric_weight, kernel_model_s, kernel_model_t, alpha
+        geometric_weight, kernel_model_s, kernel_model_t
     )
-    
-    
+
     assert result.shape == (2, 2), f"Expected shape (2, 2), got {result.shape}"
-    assert jnp.sum(result) == pytest.approx(6.5702825), f"Expected sum 6.5702825, got {jnp.sum(result)}"
+    assert jnp.sum(result) == pytest.approx(
+        6.5702825
+    ), f"Expected sum 6.5702825, got {jnp.sum(result)}"
+
+
+def test_generalized_weighted_kernel_type4():
+    """Test the generalized weighted kernel of type 4"""
+    (
+        geometric_weight,
+        spectral_matrix,
+        kernel_model_s,
+        kernel_model_t,
+        kernel_model_x,
+    ) = _test_kernel_model(seed=0)
+    result = generalized_weighted_kernel_type4(
+        geometric_weight,
+        spectral_matrix,
+        kernel_model_s,
+        kernel_model_t,
+        kernel_model_x,
+    )
+
+    
+    assert result.shape == (10, 10), f"Expected shape (10, 10), got {result.shape}"
+    assert jnp.sum(result) == pytest.approx(
+        91.721924
+    ), f"Expected sum 91.721924, got {jnp.sum(result)}"
 
 
 def _test_kernel_model(Ni=2, Nj=3, Nk=4, Nl=5, seed=0):
@@ -68,3 +93,4 @@ if __name__ == "__main__":
     test_generalized_weighted_kernel_type1()
     test_generalized_weighted_kernel_type2()
     test_generalized_weighted_kernel_type3()
+    test_generalized_weighted_kernel_type4()
