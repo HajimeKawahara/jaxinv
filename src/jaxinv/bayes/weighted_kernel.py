@@ -42,7 +42,7 @@ def generalized_weighted_kernel_type2(
     """
     wkernel_type1 = generalized_weighted_kernel_type1(geometric_weight, kernel_model_s)
     wkernel_spectral = weighted_spectral_kernel(spectral_matrix, kernel_model_x)
-    return jnp.kron(wkernel_type1, wkernel_spectral)
+    return jnp.kron(wkernel_spectral, wkernel_type1)
 
 
 def generalized_weighted_kernel_type3(geometric_weight, kernel_model_s, kernel_model_t):
@@ -79,4 +79,4 @@ def generalized_weighted_kernel_type4(
     kernel_type3 = generalized_weighted_kernel_type3(
         geometric_weight, kernel_model_s, kernel_model_t
     )
-    return jnp.kron(kernel_type3, wkernel_spectral)
+    return jnp.kron(wkernel_spectral, kernel_type3)
