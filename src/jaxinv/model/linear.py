@@ -22,7 +22,7 @@ def type2(geometric_weight, spectral_matrix, map_matrix):
     Args:
         geometric_weight (2D array): geometric weight (Ni, Nj)
         spectral_matrix (2D array): spectral matrix (Nk, Nl)
-        map_matrix (2D array): map vector (Nj,Nk)
+        map_matrix (2D array): map matrix (Nj, Nk)
 
     Returns:
         2D array: data from the linear model (Ni,Nl)
