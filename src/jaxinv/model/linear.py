@@ -95,7 +95,7 @@ def type7(spectral_geometric_weight, spectral_vector, map_vector):
     Args:
         spectral_geometric_weight (3D array): geometric weight (Ni, Nj, Nl)
         spectral_vector (vector): spectral vector (Nl,)
-        map_tensor (vector): map vector (Nj,)
+        map_vector (vector): map vector of shape (Nj,)
 
     Returns:
         2D array: data from the linear model (Ni,Nl)
