@@ -7,6 +7,15 @@ from jaxinv.bayes.weighted_kernel import generalized_weighted_kernel_type4
 
 
 def meanmap_inverse_type1(geometric_weight, kernel_model, precision_matrix_data, data):
+    """computes mean map using the inverse-mode computation for the type 1 kernel
+    
+    Args:
+        geometric_weight (2D array): Geometric weight matrix (Ni, Nj).
+        kernel_model (2D array): spatial Kernel (Nj, Nj).
+        precision_matrix_data (2D array): Precision matrix of the data (Ni, Ni).
+        data (1D array): Data matrix (Ni)
+
+    """
 
     Kw = generalized_weighted_kernel_type1(geometric_weight, kernel_model)
     Nn = jnp.shape(Kw)[0]
@@ -25,6 +34,24 @@ def meanmap_inverse_type2(
     precision_matrix_data,
     data,
 ):
+    """computes mean map using the inverse-mode computation for the type 2 kernel
+
+    Notes:
+        See tests/unittests/math/kronflatten_test.py for the Kron/flatten/reshape operations
+
+    Args:
+        geometric_weight (2D array): Geometric weight matrix (Ni, Nj).
+        spectral_matrix (2D array): Spectral matrix (Nk, Nl).
+        kernel_model_s (2D array): spatial kernel (Nj, Nj)
+        kernel_model_x (2D array): spectral kernel (Nk, Nk)
+        alpha (float): GP normalization factor.
+        precision_matrix_data (2D array): Precision matrix of the data (Ni*Nl, Ni*Nl).
+        data (2D array): Data matrix (Ni, Nl)
+    
+    Returns:
+        2D array: Mean map (Nj, Nk).
+
+    """
     Ni, _ = jnp.shape(geometric_weight)
     _, Nl = jnp.shape(spectral_matrix)
     Ky = generalized_weighted_kernel_type2(
@@ -32,7 +59,6 @@ def meanmap_inverse_type2(
     )
     I_plus_KG = jnp.eye(Ni * Nl) + alpha * precision_matrix_data @ Ky
     nvector = solve(I_plus_KG, precision_matrix_data @ data.flatten())
-    # nmatrix = nvector.reshape((Ni, Nl))
     nmatrix = nvector.reshape((Ni, Nl))
 
     return (
