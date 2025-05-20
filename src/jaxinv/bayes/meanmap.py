@@ -15,6 +15,9 @@ def meanmap_inverse_type1(geometric_weight, kernel_model, precision_matrix_data,
         precision_matrix_data (2D array): Precision matrix of the data (Ni, Ni).
         data (1D array): Data matrix (Ni)
 
+    Returns:
+       1D array: Mean map (Nj) 
+
     """
 
     Kw = generalized_weighted_kernel_type1(geometric_weight, kernel_model)
