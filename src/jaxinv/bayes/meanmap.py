@@ -30,13 +30,14 @@ def meanmap_inverse_type2(
     Ky = generalized_weighted_kernel_type2(
         geometric_weight, spectral_matrix, kernel_model_s, kernel_model_x
     )
-    I_plus_KG = jnp.eye(Ni*Nl) + alpha * precision_matrix_data @ Ky
-    nvector = solve(I_plus_KG, precision_matrix_data @ data)
-    #nmatrix = nvector.reshape((Ni, Nl))
-    nmatrix = nvector.reshape((Nl, Ni)).T
+    I_plus_KG = jnp.eye(Ni * Nl) + alpha * precision_matrix_data @ Ky
+    nvector = solve(I_plus_KG, precision_matrix_data @ data.flatten())
+    # nmatrix = nvector.reshape((Ni, Nl))
+    nmatrix = nvector.reshape((Ni, Nl))
 
     return (
-        kernel_model_s
+        alpha
+        * kernel_model_s
         @ geometric_weight.T
         @ nmatrix
         @ spectral_matrix.T
@@ -81,4 +82,3 @@ def meanmap_inverse_type4(
     IKw = jnp.eye(Ni) + alpha * precision_matrix_data @ Ky
     nvector = solve(IKw, precision_matrix_data @ data)
     nmatrix = nvector.reshape((Ni, Nl))
-
