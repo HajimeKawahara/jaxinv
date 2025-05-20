@@ -54,7 +54,6 @@ def type4(geometric_weight, spectral_matrix, map_tensor):
     Returns:
         2D array: data from the linear model (Ni,Nl)
     """
-    # return jnp.sum(geometric_weight*map_tensor, axis=1)@spectral_matrix
     return jnp.einsum("ij,ijk,kl->il", geometric_weight, map_tensor, spectral_matrix)
 
 
