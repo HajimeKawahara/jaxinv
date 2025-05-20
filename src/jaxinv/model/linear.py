@@ -35,7 +35,7 @@ def type3(geometric_weight, map_matrix):
 
     Args:
         geometric_weight (2D array): geometric weight (Ni, Nj)
-        map_matrix (vector): map matrix (Ni, Nj)
+        map_matrix (2D array): map matrix (Ni, Nj)
 
     Returns:
         vector: data from the linear model (Ni,)
