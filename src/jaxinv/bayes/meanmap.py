@@ -16,7 +16,7 @@ def meanmap_inverse_type1(geometric_weight, kernel_model, precision_matrix_data,
         data (1D array): Data matrix (Ni)
 
     Returns:
-       1D array: Mean map (Nj) 
+        1D array: Mean map (Nj) 
 
     """
 
