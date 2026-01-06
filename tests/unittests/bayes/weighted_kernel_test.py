@@ -1,7 +1,7 @@
-from jaxinv.bayes.weighted_kernel import generalized_weighted_kernel_type1
-from jaxinv.bayes.weighted_kernel import generalized_weighted_kernel_type2
-from jaxinv.bayes.weighted_kernel import generalized_weighted_kernel_type3
-from jaxinv.bayes.weighted_kernel import generalized_weighted_kernel_type4
+from jaxinv.bayes.weighted_kernel import grand_weighted_kernel_type1
+from jaxinv.bayes.weighted_kernel import grand_weighted_kernel_type2
+from jaxinv.bayes.weighted_kernel import grand_weighted_kernel_type3
+from jaxinv.bayes.weighted_kernel import grand_weighted_kernel_type4
 
 import pytest
 import jax.numpy as jnp
@@ -12,7 +12,7 @@ def test_generalized_weighted_kernel_type1():
     """Test the generalized weighted kernel of type 1"""
     geometric_weight, _, kernel_model, _, _ = _test_kernel_model(2, 3, seed=0)
 
-    result = generalized_weighted_kernel_type1(geometric_weight, kernel_model)
+    result = grand_weighted_kernel_type1(geometric_weight, kernel_model)
     expected_result = jnp.array([[6.571487, 0.36815816], [0.36815816, 0.35020235]])
 
     assert jnp.allclose(
@@ -25,7 +25,7 @@ def test_generalized_weighted_kernel_type2():
     geometric_weight, spectral_matrix, kernel_model_s, _, kernel_model_x = (
         _test_kernel_model(seed=0)
     )
-    result = generalized_weighted_kernel_type2(
+    result = grand_weighted_kernel_type2(
         geometric_weight, spectral_matrix, kernel_model_s, kernel_model_x
     )
 
@@ -38,7 +38,7 @@ def test_generalized_weighted_kernel_type2():
 def test_generalized_weighted_kernel_type3():
     """Test the generalized weighted kernel of type 3"""
     geometric_weight, _, kernel_model_s, kernel_model_t, _ = _test_kernel_model(seed=0)
-    result = generalized_weighted_kernel_type3(
+    result = grand_weighted_kernel_type3(
         geometric_weight, kernel_model_s, kernel_model_t
     )
 
@@ -57,7 +57,7 @@ def test_generalized_weighted_kernel_type4():
         kernel_model_t,
         kernel_model_x,
     ) = _test_kernel_model(seed=0)
-    result = generalized_weighted_kernel_type4(
+    result = grand_weighted_kernel_type4(
         geometric_weight,
         spectral_matrix,
         kernel_model_s,
